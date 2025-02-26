@@ -4,7 +4,7 @@ use std::process;
 use std::io;
 use std::time::SystemTime;
 use std::fs::{self, DirEntry};
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 
 #[derive(Debug)]
@@ -16,7 +16,6 @@ pub struct ImgSt {
 }
 
 pub fn new_image_stat(path: &PathBuf) -> std::io::Result<ImgSt> {
-//    let path_buf = PathBuf::from(path);
     let stat = fs::metadata(path)?;
     let img_st:ImgSt = ImgSt {
             path: PathBuf::from(path),
@@ -56,7 +55,7 @@ impl Hash for ImgSt {
 }
 */
 
-struct ImgMap {
+pub struct ImgMap {
     img_map: BTreeMap<u64, ImgSt> // BTreeMap for storing names (strings) and scores (u32)
 }
 
@@ -86,28 +85,6 @@ impl ImgMap {
   }
 }  
 
-/*
-static mut img_map: BTreeMap<u64, ImgSt> = BTreeMap::new(); // BTreeMap for storing names (strings) and scores (u32)
-
-pub fn insert_img_st(img_st: ImgSt) -> u64 {
-    let hash: u64 = calculate_hash(&img_st);
-    // let hash: u64 = img_st.hash(); 
-    unsafe {
-        img_map.insert(hash, img_st);
-    }
-    hash
-}
-
-fn read_img_dir(path:&str) {
-    let paths = fs::read_dir(dir).unwrap();
-    for path in paths {
-        let path = path.unwrap().path();
-        let img_st = ImgSt::new(&path);
-        insert_img_st(img_st);
-    }
-}       
-*/
-
 fn visit_dirs(dir: PathBuf, img_map: &mut ImgMap, cb: &dyn Fn(&DirEntry, &mut ImgMap)) -> io::Result<()> {
     if dir.is_dir() {
         for entry in fs::read_dir(dir)? {
@@ -123,7 +100,7 @@ fn visit_dirs(dir: PathBuf, img_map: &mut ImgMap, cb: &dyn Fn(&DirEntry, &mut Im
     Ok(())
 }
 
-pub fn load_dir(img_map: &ImgMap, dir: PathBuf) -> io::Result<()> {
+pub fn load_dir(img_map: &mut ImgMap, dir: PathBuf) -> io::Result<()> {
     visit_dirs(dir, img_map, &|entry, img_map| {
         let path = entry.path();
         let img_st = ImgSt::new(&path);
