@@ -19,8 +19,10 @@ decided that they want to learn Rust by building a project together.
 The second meetup was the [8th of January of 2025](https://lu.ma/ckf2s00f) and we chose this
 project.
 
-The goal is to work in the project in the meetups and in everybody's free time if they feel
-encouraged. Stay tuned of the future meetups in our [lu.ma calendar](https://lu.ma/rust-girona)
+After that we didn't make much progress until June of 2026, which in our [onsite
+meetup](https://luma.com/3bcnx1jb), the nowadays frequent assistants we decided to work in the
+project during the onsite meetups, while keeping going with the
+[exercises](https://github.com/rust-girona/rust-course-fei-solutions) during the online ones.
 
 We welcome anyone that wants to join us in this project asynchronously or in the meetups and with
 any level of experience in Rust. People new to Rust will learn, people experienced in Rust will
@@ -68,15 +70,23 @@ could use the disk to store their own data backups, so they could share the cost
 all of them would have an incentive to execute `offsync` frequently to keep the changed data in the
 cloud storage provider for shorter periods.
 
+See
+[docs/specification-functional.md](https://github.com/rust-girona/offsync/blob/main/docs/specification-functional.md).
+
 ## Status
 
-The project is in the early stages of development. We want to reach the minimum functionality:
-- Synchronize between several locations
-- Changes can only happen in one location at a time. The rest must sync before making changes.
-- One location can have more than one set of changes before the rest sync.
-- All the locations are trusted, so data won't be encrypted.
+The project is in the early stages of development.
 
-The current status is to build the basic structure of the project and the basic functionality
-without a real cloud storage involved. We will use a local directory to simulate the cloud storage.
-This will lead to a function that doesn't solve the main use case, but we'll establish the base to
-build the minimum functionality.
+We plan to offer the minimum functionality that satisfies [the main use case](#main-use-case) when
+we reach v1.
+
+The minimum functionality is:
+- Synchronize to only one destination (i.e. backup).
+- Change can only be made in the source, not in the backup.
+- Implement the support for only one cloud as s sync store, a part of a mock one mapped to a local
+  path for testing purposes.
+- Data is stored in plain, no encryption. We assume that all the locations are trusted. We don't
+  even contemplate other security issues for this version.
+
+A more detailed specification of this functionality is in
+[docs/specification-functional.md](https://github.com/rust-girona/offsync/blob/main/docs/specification-functional.md).
